@@ -34,7 +34,7 @@ class TodoAdapter(val todos: List<String>) : RecyclerView.Adapter<TodoAdapter.Te
             view.todoItemTextView.text = todo
         }
         override fun onClick(v: View?) {
-
+            println("clicked")
         }
 
     }

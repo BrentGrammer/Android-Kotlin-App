@@ -14,8 +14,8 @@ import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var layoutManager : LinearLayoutManager
-    lateinit var adapter : TodoAdapter
+    lateinit var layoutManager: LinearLayoutManager
+    lateinit var adapter: TodoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,11 +42,19 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        updateRecycler()
+    }
+
+    fun updateRecycler() {
         var prefs = getSharedPreferences("com.myapp.todolist.sharedprefs", Context.MODE_PRIVATE)
         var todos = prefs.getStringSet("todostrings", setOf()).toMutableSet()
-        println(todos)
 
+        layoutManager = LinearLayoutManager(this)
+        todoRecyclerView.layoutManager = layoutManager
+        adapter = TodoAdapter(todos.toList())
+        todoRecyclerView.adapter = adapter
     }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -54,12 +62,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
+        if (item.itemId == R.id.action_delete_all) {
+            var prefs = getSharedPreferences(getString(R.string.SHARED_PREF_NAME), Context.MODE_PRIVATE)
+            prefs.edit().putStringSet(getString(R.string.TODO_STRINGS), null).apply()
+            updateRecycler()
+
+            // need to return true to say to select this option:
+            return true
+        } else {
+            return false
         }
+
     }
+
 }
