@@ -25,7 +25,7 @@ class CreateTodoActivity : AppCompatActivity() {
             // add the title to todos:
             todos.add(title)
 
-            prefs.edit().putStringSet(getString(R.string.TODO_STRINGS), setOf(title)).apply()
+            prefs.edit().putStringSet(getString(R.string.TODO_STRINGS), todos).apply()
 
             // finish moves back to the previous activity:
             finish()
